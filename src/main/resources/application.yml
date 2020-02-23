@@ -1,0 +1,6 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://${auth0-subdomain}.auth0.com/.well-known/jwks.json
