@@ -1,10 +1,28 @@
-import auth0 from '../../utils/auth0';
+import getConfig  from 'next/config';
+import queryString from 'query-string';
+import {
+  generateLoginCookies,
+  generateNonce,
+  generateState
+} from "../../utils/auth";
+
+const {serverRuntimeConfig} = getConfig();
 
 export default async (req, res) => {
-  try {
-    await auth0.handleLogin(req, res);
-  } catch (error) {
-    console.error(error);
-    res.status(error.status || 400).end(error.message);
-  }
+  const nonce = generateNonce();
+  const state = generateState();
+
+  const query = queryString.stringify({
+    response_type: 'id_token',
+    client_id: serverRuntimeConfig.authClientId,
+    redirect_uri: `${serverRuntimeConfig.baseUrl}/api/callback`,
+    state,
+    nonce
+  });
+
+  res.writeHead(302, {
+    Location: `https://${serverRuntimeConfig.authDomain}/authorize?${query}`,
+    'Set-Cookie': generateLoginCookies(nonce, state)
+  });
+  res.end();
 }

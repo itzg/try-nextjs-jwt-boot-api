@@ -1,5 +1,4 @@
 import auth0 from "./auth0";
-import fetch from "isomorphic-unfetch";
 import Router from "next/router";
 
 export default async function sessionFromContext({req, res}) {

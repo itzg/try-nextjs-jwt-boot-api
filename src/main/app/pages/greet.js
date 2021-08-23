@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import sessionFromContext from "../utils/session";
-import fetch from "isomorphic-unfetch";
 
 function Greet({user, greeting}) {
   return (
